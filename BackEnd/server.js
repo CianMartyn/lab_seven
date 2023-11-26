@@ -28,8 +28,9 @@ main().catch(err => console.log(err));
 async function main() {
     await mongoose.connect('mongodb+srv://admin:admin@cluster0.lf4uq0d.mongodb.net/MYDB?retryWrites=true&w=majority');
 
-    // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
+ // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
 }
+// new book schema 
 
 const bookSchema = new mongoose.Schema({
     title: String,
@@ -37,7 +38,15 @@ const bookSchema = new mongoose.Schema({
     author: String,
 })
 
-const bookModel = mongoose.model('CiansBooks', bookSchema);
+const bookModel = mongoose.model('ciansbooks', bookSchema);
+
+// put method for book/id
+app.put('/api/book/:id' async (req, res)=>{
+    console.log("Update: "+req.params.id);
+
+    let book = await bookModel.findByIdAndUpdate(req.params.id, req.body, {new:true});
+    res.send(book);
+})
 
 // Post method to /api/books
 app.post('/api/books', (req, res) => {
