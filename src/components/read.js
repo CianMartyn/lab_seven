@@ -10,10 +10,10 @@ function Read() {
 
     ()=>{
 
-        axios.get('https://localhost:4000/api/books')
+        axios.get('http://localhost:4000/api/books')
         .then(
             (response)=>{
-                setData(response.data.myBooks)
+                setData(response.data)
             }
         )
         .catch(
@@ -25,10 +25,24 @@ function Read() {
     }, []
   );
 
+  const Reload = (e)=>{
+    axios.get('http://localhost:4000/api/books')
+        .then(
+            (response)=>{
+                setData(response.data)
+            }
+        )
+        .catch(
+            (error)=>{
+                console.log(error);
+            }
+        )
+  }
+
     return (
         <div>
             <h2>Hello from Read Component!</h2>
-            <Books myBooks={data}></Books>
+            <Books myBooks={data} ReloadData={Reload}></Books>
         </div>
     );
 

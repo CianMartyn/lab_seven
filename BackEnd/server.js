@@ -40,8 +40,15 @@ const bookSchema = new mongoose.Schema({
 
 const bookModel = mongoose.model('ciansbooks', bookSchema);
 
+app.delete('/api/book/:id',async (req, res)=>{
+    console.log("Delete: "+req.params.id);
+
+let book = await bookModel.findByIdAndDelete(req.params.id)
+res.send(book);
+})
+
 // put method for book/id
-app.put('/api/book/:id' async (req, res)=>{
+app.put('/api/book/:id', async (req, res)=>{
     console.log("Update: "+req.params.id);
 
     let book = await bookModel.findByIdAndUpdate(req.params.id, req.body, {new:true});
@@ -49,7 +56,7 @@ app.put('/api/book/:id' async (req, res)=>{
 })
 
 // Post method to /api/books
-app.post('/api/books', (req, res) => {
+app.post('/api/book', (req, res) => {
     console.log(req.body);
     bookModel.create({
         title: req.body.title,
@@ -69,7 +76,6 @@ app.get('/api/books', async(req, res) => {
 
     let books = await bookModel.find({})
     res.json(books)
-
 })
 
 // Read book id
