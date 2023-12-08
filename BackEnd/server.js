@@ -2,18 +2,23 @@ const express = require('express')
 const app = express()
 const port = 4000;
 
+// npm run build
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../build')));
+app.use('/static', express.static(path.join(__dirname, 'build//static')));
+
 // CORS
-const cors = require('cors');
+// const cors = require('cors');
 
-app.use(cors());
+// app.use(cors());
 
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    res.header("Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+// app.use(function (req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+//     res.header("Access-Control-Allow-Headers",
+//         "Origin, X-Requested-With, Content-Type, Accept");
+//     next();
+// });
 
 // npm i body-parser
 const bodyParser = require('body-parser')
@@ -40,6 +45,7 @@ const bookSchema = new mongoose.Schema({
 
 const bookModel = mongoose.model('ciansbooks', bookSchema);
 
+//app.delete
 app.delete('/api/book/:id',async (req, res)=>{
     console.log("Delete: "+req.params.id);
 
@@ -86,6 +92,11 @@ app.get('/api/book/:id', async(req, res)=>{
     res.send(book)
 
 })
+
+//Handles any requests that don't match the ones above
+app.get('*', (req,res) => {
+    res.sendFile(path.join(_dirname+'/../build/index.html'));
+});
 
 // Consolelog
 app.listen(port, () => {
